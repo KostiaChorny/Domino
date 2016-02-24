@@ -82,7 +82,7 @@ namespace Domino
                     continue;
                 }
 
-                throw new Exception("Can't build uninterrupted chain");
+                throw new Exception("That it's impossible to create uninterrupted chain");
             }
 
             return new DominoChain(result);
