@@ -10,6 +10,7 @@ namespace Domino
         {
             Console.WriteLine("Enter your chain:");
 
+            //Input data. Example: "12 23 34 45"
             string input = Console.ReadLine();
             List<string> dominos = input.Split(' ').ToList();
 
@@ -18,11 +19,16 @@ namespace Domino
                 var chain = new DominoChain(dominos);
                 var result = chain.BuildUninterruptedChain();
 
+                Console.WriteLine("Uninterupted chain:");
                 Console.WriteLine(result);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine("-->" + e.InnerException.Message);
+                }
             }
 
             Console.ReadKey();

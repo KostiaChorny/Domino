@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Domino
 {
+    /// <summary>
+    /// Dominos chain class
+    /// </summary>
     class DominoChain
     {
         private List<Domino> dominos;
@@ -17,25 +19,47 @@ namespace Domino
 
         public DominoChain(List<Domino> dominos)
         {
+            if (dominos == null)
+                throw new ArgumentNullException("dominos");
+            if (dominos.Count == 0)
+                throw new ArgumentException("Can't create empty chain. List of dominos is empty");
+
             this.dominos = dominos;
         }
 
         private List<Domino> ConvertFromStrings(List<string> list)
         {
+            if (list == null)
+                throw new ArgumentNullException("list");
+            if (list.Count == 0)
+                throw new ArgumentException("Can't create empty chain. List of strings is empty");
+
             var result = new List<Domino>();
-            foreach (var item in list)
+            try
             {
-                var domino = new Domino(item);
-                result.Add(domino);
+                foreach (var item in list)
+                {
+                    var domino = new Domino(item);
+                    result.Add(domino);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException("One of strings have a wrong format", ex);
             }
             return result;
         }
 
+        /// <summary>
+        /// Buids uninterupted chain for current dominos chain
+        /// </summary>
+        /// <returns>Uninterupted dominos chain</returns>
         public DominoChain BuildUninterruptedChain()
         {
             var input = new List<Domino>(dominos);
             var result = new List<Domino>();
 
+            // Selecting first domino
             var current = input[0];
             input.RemoveAt(0);
 
@@ -44,8 +68,10 @@ namespace Domino
 
             result.Add(current);
 
+            // Growing chain from the left and the right 
             while (input.Count > 0)
             {
+                // Adding next domino to the right side of the chain
                 var i = input.FirstOrDefault(d => d.LeftNumber == rightNumber);
                 if (i != null)
                 {
@@ -55,6 +81,7 @@ namespace Domino
                     continue;
                 }
 
+                // Adding next domino to the right side of the chain with swaping
                 i = input.FirstOrDefault(d => d.RightNumber == rightNumber);
                 if (i != null)
                 {
@@ -64,6 +91,7 @@ namespace Domino
                     continue;
                 }
 
+                // Adding next domino to the left side of the chain with swaping
                 i = input.FirstOrDefault(d => d.LeftNumber == leftNumber);
                 if (i != null)
                 {
@@ -73,6 +101,7 @@ namespace Domino
                     continue;
                 }
 
+                // Adding next domino to the left side of the chain
                 i = input.FirstOrDefault(d => d.RightNumber == leftNumber);
                 if (i != null)
                 {
@@ -82,7 +111,7 @@ namespace Domino
                     continue;
                 }
 
-                throw new Exception("That it's impossible to create uninterrupted chain");
+                throw new Exception("Unable to create uninterrupted chain");
             }
 
             return new DominoChain(result);
