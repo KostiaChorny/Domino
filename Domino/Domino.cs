@@ -35,7 +35,7 @@ namespace Domino
         }
 
         /// <summary>
-        /// Swap left side to the rigth, and right side to the left
+        /// Swap left side to the right, and right side to the left
         /// </summary>
         /// <returns>Swapped domino</returns>
         internal Domino SwapLetters()
